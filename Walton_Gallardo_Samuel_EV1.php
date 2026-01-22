@@ -75,12 +75,15 @@ function showChart(){
     foreach ($carrito as $key => $value) {
         $total += ($value["price"] * $value["stock"]);
     }
-    echo $total."hola";
+    if ($total >= 100) {
+        $total *= 0.10;
+        echo "";
+    }
 }
 
 
-addToChart("food","potatoes",1);
-addToChart("food","potatoes",1);
+addToChart("food","caviar",5);
+addToChart("food","potatoes",40);
 var_dump($carrito);
 showChart();
 
