@@ -50,38 +50,38 @@ function addToChart($category,$product,$amount){
     $nameFound = false;
     $enough = true;
     foreach ($inventory as $classification => $value) {
-        if ($category == $value) {
+        if ($classification == $category) {
             $categoryFound = true;
-            echo "Bien";
             foreach ($value as $key => $attribute) {
-                if ($attribute["name"] == $product and $categoryFound = true){
+                if ($attribute["name"] == $product){
                     $nameFound = true;
-                    echo "Bueno";
+                    $cost = $attribute["price"];
                 }
-                if ($amount > $attribute["price"] and $nameFound == true) {
+                if ($amount > $attribute["stock"] and $nameFound == true) {
                     $enough = false;
-                    echo "Malo";
                 }
-                if ($nameFound == true and $enough == true) {
-                    echo "Genial";
-                    break;
-                }
+            }
         }
-        }
-
+    }
+    if ($nameFound == true and $enough == true and $categoryFound == true) {
+        $carrito[] = ["name" => $product, "stock" => $amount, "price" => $cost];
+    }else {
+        echo "El producto o la categoría no son correctas o el stock es insuficiente. Inténtelo de nuevo.";
     }
 }
-
-addToChart("food","caviar",3);
-
-
-
-
-
-
-
-
+function showChart(){
+    global $carrito;
+    $total = 0;
+    foreach ($carrito as $key => $value) {
+        $total += ($value["price"] * $value["stock"]);
+    }
+    echo $total."hola";
+}
 
 
+addToChart("food","potatoes",1);
+addToChart("food","potatoes",1);
+var_dump($carrito);
+showChart();
 
 ?>
