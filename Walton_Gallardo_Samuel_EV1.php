@@ -40,12 +40,13 @@ $inventory = [
             "stock" => 18
         ]
     ]
-    ];
+];
 
 //Second part of the exercicse
 $carrito = [];
-function addToChart($category,$product,$amount){
-    global $inventory,$carrito;
+function addToChart($category, $product, $amount)
+{
+    global $inventory, $carrito;
     $categoryFound = false;
     $nameFound = false;
     $enough = true;
@@ -53,38 +54,43 @@ function addToChart($category,$product,$amount){
         if ($classification == $category) {
             $categoryFound = true;
             foreach ($value as $key => $attribute) {
-                if ($attribute["name"] == $product){
+                if ($attribute["name"] == $product) {
                     $nameFound = true;
                     $cost = $attribute["price"];
-                }
-                if ($amount > $attribute["stock"] and $nameFound == true) {
-                    $enough = false;
+                    if ($amount > $inventory[$classification][$key]["stock"] and $nameFound == true) {
+                        $enough = false;
+                    }
+                    if ($enough == true) {
+                        $inventory[$classification][$key]["stock"] -= $amount;
+                    }
                 }
             }
         }
     }
     if ($nameFound == true and $enough == true and $categoryFound == true) {
         $carrito[] = ["name" => $product, "stock" => $amount, "price" => $cost];
-    }else {
-        echo "El producto o la categoría no son correctas o el stock es insuficiente. Inténtelo de nuevo.";
+    } else {
+        echo "El producto o la categoría no son correctas o el stock es insuficiente. Inténtelo de nuevo.\n";
     }
 }
-function showChart(){
+function showChart()
+{
     global $carrito;
     $total = 0;
     foreach ($carrito as $key => $value) {
         $total += ($value["price"] * $value["stock"]);
+        echo 'Name: ' . $value["name"] . ' Cuantity: ' . $value["stock"] . ' Price: ' . $value["price"] . '€ ' . "\xA";
     }
     if ($total >= 100) {
-        $total *= 0.10;
-        echo "";
+        $total -= ((10 / 100) * $total);
+        echo "You have a discount of 10%! Your total is $total €";
+    } else {
+
+        echo "Your total is $total €";
     }
 }
 
-
-addToChart("food","caviar",5);
-addToChart("food","potatoes",40);
-var_dump($carrito);
+addToChart("food","potatoes",80);
 showChart();
 
 ?>
